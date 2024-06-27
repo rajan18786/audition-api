@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuditionIntegrationClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">audition-api</a> &gt; <a href="index.source.html" class="el_package">com.audition.integration</a> &gt; <span class="el_source">AuditionIntegrationClient.java</span></div><h1>AuditionIntegrationClient.java</h1><pre class="source lang-java linenums">package com.audition.integration;
+
+import com.audition.common.exception.SystemException;
+import com.audition.model.AuditionComment;
+import com.audition.model.AuditionPost;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+@Component
+public class AuditionIntegrationClient {
+
+<span class="fc" id="L20">    private final String POSTS_URL = &quot;https://jsonplaceholder.typicode.com/posts&quot;;</span>
+    private final RestTemplate restTemplate;
+
+<span class="fc" id="L23">    public AuditionIntegrationClient(RestTemplate restTemplate) {</span>
+<span class="fc" id="L24">        this.restTemplate = restTemplate;</span>
+<span class="fc" id="L25">    }</span>
+
+    public List&lt;AuditionPost&gt; getPosts(Map&lt;String, Object&gt; filters) {
+
+<span class="fc" id="L29">        URI uri = buildUriWithFilters(POSTS_URL, filters);</span>
+        try {
+<span class="fc" id="L31">            ResponseEntity&lt;AuditionPost[]&gt; responseEntity = restTemplate.getForEntity(uri, AuditionPost[].class);</span>
+<span class="fc" id="L32">            AuditionPost[] auditionpost = responseEntity.getBody();</span>
+<span class="pc bpc" id="L33" title="1 of 4 branches missed.">            if (auditionpost != null &amp;&amp; auditionpost.length &gt; 0) {</span>
+<span class="fc" id="L34">                return List.of(auditionpost);</span>
+            } else {
+<span class="fc" id="L36">                throw new SystemException(&quot;Cannot find any posts&quot;, &quot;SYSEXP-MEDIBANK-1&quot;, 404);</span>
+            }
+<span class="fc" id="L38">        } catch (final HttpClientErrorException e) {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {</span>
+<span class="fc" id="L40">                throw new SystemException(&quot;Cannot find any Posts&quot;, 404);</span>
+            } else {
+<span class="fc" id="L42">                throw new SystemException(e.getMessage(), &quot;SYSEXP-MEDIBANK-2&quot;, e.getStatusCode().value(),</span>
+<span class="fc" id="L43">                    e.getRootCause());</span>
+            }
+        }
+
+    }
+
+    public AuditionPost getPostById(final int id) throws SystemException {
+
+<span class="fc" id="L51">        String url = POSTS_URL + &quot;/&quot; + id;</span>
+        try {
+<span class="fc" id="L53">            ResponseEntity&lt;AuditionPost&gt; responseEntity = restTemplate.getForEntity(url, AuditionPost.class);</span>
+<span class="fc" id="L54">            return responseEntity.getBody();</span>
+<span class="fc" id="L55">        } catch (final HttpClientErrorException e) {</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {</span>
+<span class="fc" id="L57">                throw new SystemException(&quot;Cannot find a Post with id &quot; + id, &quot;Resource Not Found&quot;, 404);</span>
+            } else {
+<span class="nc" id="L59">                throw new SystemException(e.getMessage(), &quot;SYSEXP-MEDIBANK-3&quot;, e.getStatusCode().value(),</span>
+<span class="nc" id="L60">                    e.getRootCause());</span>
+            }
+        }
+    }
+
+    public List&lt;AuditionComment&gt; getCommentsByPostId(final int postId) {
+
+<span class="fc" id="L67">        String url = POSTS_URL + &quot;/&quot; + postId + &quot;/comments&quot;;</span>
+        try {
+<span class="fc" id="L69">            ResponseEntity&lt;AuditionComment[]&gt; responseEntity = restTemplate.getForEntity(url, AuditionComment[].class);</span>
+<span class="fc" id="L70">            AuditionComment[] auditionComment = Optional.ofNullable(responseEntity.getBody())</span>
+<span class="fc" id="L71">                .map(body -&gt; {</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">                    if (body.length &gt; 0) {</span>
+<span class="fc" id="L73">                        return body;</span>
+                    } else {
+<span class="nc" id="L75">                        throw new SystemException(&quot;Cannot find comments with Post id &quot; + postId, &quot;SYSEXP-MEDIBANK-4&quot;,</span>
+<span class="nc" id="L76">                            404);</span>
+                    }
+                })
+<span class="fc" id="L79">                .orElseThrow(</span>
+<span class="fc" id="L80">                    () -&gt; new SystemException(&quot;Cannot find comments with Post id &quot; + postId, &quot;SYSEXP-MEDIBANK-5&quot;, 404));</span>
+<span class="fc" id="L81">            return List.of(auditionComment);</span>
+<span class="fc" id="L82">        } catch (final HttpClientErrorException e) {</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {</span>
+<span class="nc" id="L84">                throw new SystemException(&quot;Cannot find comments with Post id &quot; + postId, &quot;Resource Not Found&quot;, 404);</span>
+            } else {
+<span class="fc" id="L86">                throw new SystemException(e.getMessage(), &quot;SYSEXP-MEDIBANK-6&quot;, e.getStatusCode().value(),</span>
+<span class="fc" id="L87">                    e.getRootCause());</span>
+            }
+        }
+    }
+
+    public List&lt;AuditionComment&gt; getCommentsForAPostId(Map&lt;String, Object&gt; filters) {
+
+        try {
+<span class="fc" id="L95">            String COMMENTS_URL = &quot;https://jsonplaceholder.typicode.com/comments&quot;;</span>
+<span class="fc" id="L96">            URI uri = buildUriWithFilters(COMMENTS_URL, filters);</span>
+<span class="fc" id="L97">            ResponseEntity&lt;AuditionComment[]&gt; responseEntity = restTemplate.getForEntity(uri, AuditionComment[].class);</span>
+<span class="fc" id="L98">            AuditionComment[] auditionComment = responseEntity.getBody();</span>
+<span class="pc bpc" id="L99" title="2 of 4 branches missed.">            if (auditionComment != null &amp;&amp; auditionComment.length &gt; 0) {</span>
+<span class="fc" id="L100">                return List.of(auditionComment);</span>
+            } else {
+<span class="nc" id="L102">                throw new SystemException(&quot;Cannot find comments with Post id &quot;, &quot;SYSEXP-MEDIBANK-7&quot;, 404);</span>
+            }
+
+<span class="fc" id="L105">        } catch (final HttpClientErrorException e) {</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {</span>
+<span class="nc" id="L107">                throw new SystemException(&quot;Cannot find comments Resource Not Found&quot;, 404);</span>
+            } else {
+<span class="fc" id="L109">                throw new SystemException(e.getMessage(), &quot;SYSEXP-MEDIBANK-8&quot;, e.getStatusCode().value(),</span>
+<span class="fc" id="L110">                    e.getRootCause());</span>
+            }
+        }
+    }
+
+    private URI buildUriWithFilters(String baseUrl, Map&lt;String, Object&gt; filters) {
+<span class="fc" id="L116">        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseUrl);</span>
+        // Add parameters from the map if present
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (filters != null) {</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            for (Map.Entry&lt;String, Object&gt; entry : filters.entrySet()) {</span>
+<span class="fc" id="L120">                builder.queryParam(entry.getKey(), entry.getValue());</span>
+<span class="fc" id="L121">            }</span>
+        }
+<span class="fc" id="L123">        return builder.build().toUri();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

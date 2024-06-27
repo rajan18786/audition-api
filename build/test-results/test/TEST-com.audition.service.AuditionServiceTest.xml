@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.audition.service.AuditionServiceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2024-06-27T11:01:27" hostname="KSVASAN" time="0.041">
+  <properties/>
+  <testcase name="testGetPosts()" classname="com.audition.service.AuditionServiceTest" time="0.01"/>
+  <testcase name="testGetPostsById()" classname="com.audition.service.AuditionServiceTest" time="0.008"/>
+  <testcase name="testGetCommentsForPostId()" classname="com.audition.service.AuditionServiceTest" time="0.006"/>
+  <testcase name="testGetCommentsByPostId()" classname="com.audition.service.AuditionServiceTest" time="0.006"/>
+  <system-out><![CDATA[2024-06-27 16:31:27.067  INFO 7556 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.audition.service.AuditionServiceTest]: AuditionServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-06-27 16:31:27.088  INFO 7556 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.audition.AuditionApplication for test class com.audition.service.AuditionServiceTest
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

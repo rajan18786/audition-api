@@ -1,0 +1,2 @@
+C:\Users\KSrinivasan\IdeaProjects\audition-api\build\classes\java\test\com\audition\AuditionApplicationTests.class
+C:\Users\KSrinivasan\IdeaProjects\audition-api\build\classes\java\test\com\audition\AuditionApplicationTests2.class

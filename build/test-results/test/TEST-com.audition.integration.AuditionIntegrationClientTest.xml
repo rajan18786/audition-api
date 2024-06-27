@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.audition.integration.AuditionIntegrationClientTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2024-06-27T11:01:26" hostname="KSVASAN" time="0.386">
+  <properties/>
+  <testcase name="testGetPostsForAUserId()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.181"/>
+  <testcase name="testGetPosts()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.008"/>
+  <testcase name="testGetPostsForAUserId_Not_Found()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.019"/>
+  <testcase name="testGetPostsById()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.014"/>
+  <testcase name="testGetCommentsForPostId()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.009"/>
+  <testcase name="testGetCommentsForPostId_BadGateway()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.014"/>
+  <testcase name="testGetPostsForAUserId_SystemException()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.012"/>
+  <testcase name="testGetCommentsByPostId()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.009"/>
+  <testcase name="testGetCommentsByPostId_BadGateway()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.01"/>
+  <testcase name="testGetPostsForAUserId_BadGateway()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.009"/>
+  <testcase name="testGetPostsById_Not_Found()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.009"/>
+  <testcase name="testGetPostsReturningNull()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.021"/>
+  <testcase name="contextLoads()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.01"/>
+  <testcase name="testGetCommentsByUnknownPostId()" classname="com.audition.integration.AuditionIntegrationClientTest" time="0.019"/>
+  <system-out><![CDATA[2024-06-27 16:31:26.075  INFO 7556 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.audition.integration.AuditionIntegrationClientTest]: AuditionIntegrationClientTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-06-27 16:31:26.079  INFO 7556 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.audition.AuditionApplication for test class com.audition.integration.AuditionIntegrationClientTest
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
